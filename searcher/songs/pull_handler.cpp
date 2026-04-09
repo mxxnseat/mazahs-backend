@@ -22,16 +22,17 @@ void Searcher::Songs::SongsPullHandler::process(const SongsPullPayload& payload)
         throw std::runtime_error("download failed");
     }
 
+    // TODO: Publish with debezium
     Domain::Songs::Entities::Song::DTO song = song_service.create({
         .name = "test",
         .url = payload.url,
         .status = SONG_STATUS::to_string(SongStatus::Pending)
     });
 
-    SongsHashesExtractPayload extract_payload = {
-        .path = *ytdlp_result.file_path,
-        .song_id = song.id
-    };
+    // SongsHashesExtractPayload extract_payload = {
+    //     .path = *ytdlp_result.file_path,
+    //     .song_id = song.id
+    // };
 
-    songs_hashes_queue.add(Searcher::Songs::Constants::SONGS_HASHES_EXTRACT_TASK_NAME, extract_payload);
+    // songs_hashes_queue.add(Searcher::Songs::Constants::SONGS_HASHES_EXTRACT_TASK_NAME, extract_payload);
 }

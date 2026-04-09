@@ -18,17 +18,17 @@ int Core::Config::REDIS_PORT() {
 }
 
 std::string Core::Config::DOWNLOAD_DIRECTORY(){
-    return ConfigService::get("DOWNLOAD_DIRECTORY", "/tmp");
+    return ConfigService::get("DOWNLOAD_DIRECTORY", "/tmp").value();
 }
 
 int Core::Config::WORKING_SAMPLERATE(){
-        return std::stoi(ConfigService::get("WORKING_SAMPLERATE", "22050"));
+        return std::stoi(ConfigService::get("WORKING_SAMPLERATE", "22050").value());
 }
 
 int Core::Config::STFT_WINDOW_LENGTH() {
-    return std::stoi(ConfigService::get("STFT_WINDOW_LENGTH", "2048"));
+    return std::stoi(ConfigService::get("STFT_WINDOW_LENGTH", "2048").value());
 }
 
 int Core::Config::STFT_HOP_LENGTH() {
-    return std::stoi(ConfigService::get("STFT_HOP_LENGTH", "512"));
+    return std::stoi(ConfigService::get("STFT_HOP_LENGTH", "512").value());
 }
