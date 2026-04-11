@@ -1,15 +1,21 @@
+#include <cstdlib>
 #include <hiredis/hiredis.h>
 #include <kangaru/kangaru.hpp>
 
+
+import core.aws;
+import core.aws.config;
 import core.ioc;
 import core.config;
-
+import config;
+import core.ytdlp;
 import searcher.songs;
 import searcher.songs.ioc;
 import redis;
 import std;
 import jobs;
 import postgres;
+
 
 int main(){
     kgr::container container;
