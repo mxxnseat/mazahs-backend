@@ -7,6 +7,7 @@ add_repositories("localrepo lib")
 
 add_requires("fftw", "catch2", "eigen", "libsamplerate", "libpqxx", "websocketpp", "nlohmann_json", "hiredis", "kangaru", "librdkafka", "aws-sdk")
 add_requires("libsndfile", { configs = { shared = false } })
+add_requires("boost", { configs = { uuid = true } })
 
 target("main")
     set_kind("binary")
@@ -50,7 +51,7 @@ target("searcher")
     set_policy("build.c++.modules", true)
     set_policy("build.c++.modules.std", true)
     set_policy("run.autobuild", true)
-    add_packages("fftw", "libsndfile", "eigen", "libsamplerate", "libpqxx", "websocketpp", "nlohmann_json", "hiredis", "kangaru", "librdkafka", "aws-sdk")
+    add_packages("fftw", "libsndfile", "eigen", "libsamplerate", "libpqxx", "websocketpp", "nlohmann_json", "hiredis", "kangaru", "librdkafka", "aws-sdk", "boost")
 
 target("api")
     set_kind("binary")
@@ -70,7 +71,7 @@ target("api")
     set_policy("build.c++.modules", true)
     set_policy("build.c++.modules.std", true)
     set_policy("run.autobuild", true)
-    add_packages("fftw", "libsndfile", "eigen", "libsamplerate", "libpqxx", "websocketpp", "nlohmann_json", "hiredis", "kangaru")
+    add_packages("fftw", "libsndfile", "eigen", "libsamplerate", "libpqxx", "websocketpp", "nlohmann_json", "hiredis", "kangaru", "librdkafka", "aws-sdk")
 
 
 target("websocket")

@@ -9,6 +9,8 @@ import jobs;
 import redis;
 import domain.songs;
 import searcher.songs.dsp;
+import core.aws;
+import core.aws.config;
 
 export namespace Searcher::Songs {
     namespace Constants {
@@ -43,13 +45,20 @@ export namespace Searcher::Songs {
 
     class SongsPullHandler : public Jobs::Handler<SongsPullPayload> {
         public:
-            SongsPullHandler(SongsHashesQueue& songs_hashes_queue, Domain::Songs::Services::SongService& song_service);
+            SongsPullHandler(
+                SongsHashesQueue& songs_hashes_queue, 
+                Domain::Songs::Services::SongService& song_service, 
+                Core::AWS::S3Client& s3_client,
+                Core::AWS::Config::S3Options& s3_options
+            );
             void process(const SongsPullPayload& payload) const override;
 
         private:
             std::string output_directory;
             SongsHashesQueue& songs_hashes_queue;
             Domain::Songs::Services::SongService& song_service;
+            Core::AWS::S3Client& s3_client;
+            Core::AWS::Config::S3Options& s3_options;
     };
 
     class SongsHashesExtractHandler : public Jobs::Handler<SongsHashesExtractPayload> {

@@ -8,9 +8,6 @@ import std;
 export class ConfigService{
     public:
         static std::optional<std::string> get(const std::string& key, std::optional<std::string> default_value = std::nullopt){
-            if(!default_value.has_value()){
-                return std::nullopt;
-            }
             const char* val = std::getenv(key.c_str());
             return val ? std::string(val) : default_value;
         }

@@ -27,7 +27,13 @@ export namespace Searcher::Songs::IoC {
     struct SongsHashesQueueService : kgr::single_service<Searcher::Songs::SongsHashesQueue, kgr::dependency<Core::IoC::RedisClientService>> {};
 
     struct SongsPullHandlerService : 
-        kgr::single_service<Searcher::Songs::SongsPullHandler, kgr::dependency<SongsHashesQueueService, Domain::Songs::IoC::SongServiceService>>, 
+        kgr::single_service<Searcher::Songs::SongsPullHandler, 
+            kgr::dependency<
+            SongsHashesQueueService, 
+            Domain::Songs::IoC::SongServiceService,
+            Core::IoC::S3ClientService,
+            Core::IoC::S3OptionsService
+            >>, 
         kgr::autocall<method<&Searcher::Songs::SongsPullHandler::bootstrap>> {};
     struct SongsHashesExtractHandlerService:
         kgr::single_service<Searcher::Songs::SongsHashesExtractHandler, 
