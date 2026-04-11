@@ -40,7 +40,6 @@ export namespace Domain::Songs {
 
         struct Song {
             struct DTO {
-                std::string name;
                 std::string url;
                 std::string audio_file_path;
                 std::string status;
@@ -48,7 +47,6 @@ export namespace Domain::Songs {
 
                 static Song::DTO from_row(const pqxx::row& result) {
                     return Song::DTO{
-                        .name = result["name"].as<std::string>(),
                         .url = result["url"].as<std::string>(),
                         .audio_file_path = result["audio_file_path"].as<std::string>(),
                         .status = result["status"].as<std::string>(),
@@ -58,14 +56,12 @@ export namespace Domain::Songs {
             };
 
             struct CreatePayload {
-                std::string name;
                 std::string url;
                 std::string status;
                 std::string audio_file_path;
 
                 static std::unordered_map<std::string, std::string> to_fields(const CreatePayload& payload) {
                     return {
-                        {"name", payload.name},
                         {"url", payload.url},
                         {"status", payload.status},
                         {"audio_file_path", payload.audio_file_path}
@@ -74,15 +70,11 @@ export namespace Domain::Songs {
             };
 
             struct UpdatePayload {
-                std::optional<std::string> name;
                 std::optional<std::string> url;
                 std::optional<std::string> status;
 
                 static std::unordered_map<std::string, std::string> to_fields(const UpdatePayload& payload) {
                     std::unordered_map<std::string, std::string> result;
-                    if(payload.name){
-                        result.emplace("name", *payload.name);
-                    }
                     if(payload.url){
                         result.emplace("url", *payload.url);
                     }
