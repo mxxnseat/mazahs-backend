@@ -50,7 +50,6 @@ void Searcher::Songs::SongsPullHandler::process(const SongsPullPayload& payload)
 
     // TODO: Publish with debezium
     Domain::Songs::Entities::Song::DTO song = song_service.create({
-        .name = "test",
         .url = payload.url,
         .status = SONG_STATUS::to_string(SongStatus::Pending),
         .audio_file_path = object_key,

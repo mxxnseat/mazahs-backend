@@ -45,3 +45,5 @@ xmake run websocket
 - [Infrastructure services](https://github.com/mxxnseat/mazahs-infrastructure)
 
 - [Frontend app](https://github.com/mxxnseat/mazahs-frontend)
+
+- [Song classifier](https://github.com/mxxnseat/mazahs-song-classifier)
