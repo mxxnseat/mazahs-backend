@@ -7,7 +7,7 @@ package("aws-sdk")
     add_deps("cmake")
 
     on_load(function (package)
-            package:add("frameworks", "CoreFoundation", "Security", "Foundation", "SystemConfiguration", "Network")
+        package:add("frameworks", "CoreFoundation", "Security", "Foundation", "SystemConfiguration", "Network")
     end)
 
     on_install("windows", "linux", "macosx", "iphoneos", "mingw", "android", function (package)

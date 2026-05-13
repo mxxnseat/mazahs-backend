@@ -5,6 +5,8 @@ module;
 
 export module core.ioc;
 
+import core.amqp;
+import core.amqp.config;
 import core.aws.config;
 import core.aws;
 import core.kafka.config;
@@ -37,6 +39,21 @@ export namespace Core::IoC {
             Core::AWS::Config::S3Options,
             kgr::dependency<ConfigServiceService>> {};
     struct S3ClientService : kgr::single_service<Core::AWS::S3Client, kgr::dependency<S3OptionsService>> {};
+
+    struct AmqpOptionsService
+        : kgr::single_service<
+            Core::AMQP::Config::AmqpOptions,
+            kgr::dependency<ConfigServiceService>> {};
+
+    struct AmqpContextService
+        : kgr::single_service<
+            Core::AMQP::AmqpContext, 
+            kgr::dependency<AmqpOptionsService>> {};
+
+    struct AmqpConsumerService
+        : kgr::single_service<
+            Core::AMQP::AmqpConsumer, 
+            kgr::dependency<AmqpContextService>> {};
 
     struct WebsocketServerService : kgr::single_service<Core::Websocket::WebsocketServer> {};
 }

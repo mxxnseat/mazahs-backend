@@ -15,10 +15,7 @@ module;
 
 export module core.ytdlp;
 
-template <typename T>
-concept WritableStream = requires(T& stream, const char* data, std::streamsize n) {
-    stream.write(data, n);
-};
+import core.concepts;
 
 export namespace Core::Ytdlp {
     class Commander {
@@ -29,13 +26,8 @@ export namespace Core::Ytdlp {
                 url = u;
                 return *this;
             }
-
-            Commander& set_audio_format(std::string f) {
-                audio_format = f;
-                return *this;
-            }
             
-            template <WritableStream T> 
+            template <Core::Concepts::WritableStream T> 
             int pipe(T&& stream){
                 return execute(stream);
             }
@@ -67,14 +59,11 @@ export namespace Core::Ytdlp {
                     execlp(
                         "yt-dlp",
                         "yt-dlp",
-                        "-x",
+                        "--quiet",
+                        "--no-progress",
                         "-f",
                         "bestaudio",
                         "-o", "-",
-                        "--audio-format",
-                        audio_format.c_str(),
-                        "--postprocessor-args",
-                        "-ar 22050",
                         url.c_str(),
                         (char*)nullptr
                     );
@@ -106,6 +95,5 @@ export namespace Core::Ytdlp {
             }
         private:
             std::string url;
-            std::string audio_format = "wav";
     };
 }

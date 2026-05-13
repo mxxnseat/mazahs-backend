@@ -137,7 +137,7 @@ std::optional<Entities::SongHash::VoteResult> DAOs::SongHashDAO::vote(const std:
             matches as (
                 select
                     sh.song_id,
-                    (floor((sh.anchor_time - qh.query_time)/5.0)*5) as time_offset,
+                    sh.anchor_time - qh.query_time as time_offset,
                     sh.anchor_time as anchor_time
                 from query_hashes qh
                 join song_hashes sh
@@ -164,7 +164,6 @@ std::optional<Entities::SongHash::VoteResult> DAOs::SongHashDAO::vote(const std:
             )
             select
                 s.id,
-                s.name,
                 s.url,
                 s.status,
                 b.votes,

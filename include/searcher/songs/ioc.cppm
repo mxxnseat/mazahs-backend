@@ -6,6 +6,7 @@ module;
 export module searcher.songs.ioc;
 
 import core.ioc;
+import searcher.songs.amqp;
 import searcher.songs;
 import searcher.songs.dsp;
 import domain.songs.ioc;
@@ -14,7 +15,10 @@ using namespace Core::IoC::Utils;
 
 export namespace Searcher::Songs::IoC {
     // DSP
-    struct ReadFileNodeService : kgr::single_service<Searcher::Songs::DSP::ReadFileNode> {};
+    struct ReadFileNodeService : kgr::single_service<Searcher::Songs::DSP::ReadFileNode, kgr::dependency<
+            Core::IoC::S3ClientService,
+            Core::IoC::S3OptionsService
+    >> {};
     struct ResampleNodeService : kgr::single_service<Searcher::Songs::DSP::ResampleNode> {};
     struct STFTNodeService : kgr::single_service<Searcher::Songs::DSP::STFTNode> {};
     struct ExtractPeaksNodeService : kgr::single_service<Searcher::Songs::DSP::ExtractPeaksNode> {};
@@ -29,7 +33,6 @@ export namespace Searcher::Songs::IoC {
     struct SongsPullHandlerService : 
         kgr::single_service<Searcher::Songs::SongsPullHandler, 
             kgr::dependency<
-            SongsHashesQueueService, 
             Domain::Songs::IoC::SongServiceService,
             Core::IoC::S3ClientService,
             Core::IoC::S3OptionsService
@@ -48,5 +51,9 @@ export namespace Searcher::Songs::IoC {
             >
         >,
         kgr::autocall<method<&Searcher::Songs::SongsHashesExtractHandler::bootstrap>> {};
+
+    struct SongsClassifierHandlerService :
+        kgr::single_service<Searcher::Songs::AMQP::Handlers::SongsClassifierHandler,
+            kgr::dependency<SongsHashesQueueService>> {};
 
 }
