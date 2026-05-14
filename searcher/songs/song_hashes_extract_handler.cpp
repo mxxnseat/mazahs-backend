@@ -32,7 +32,16 @@ Searcher::Songs::SongsHashesExtractHandler::SongsHashesExtractHandler(
     Jobs::Handler<SongsHashesExtractPayload>(Searcher::Songs::Constants::SONGS_HASHES_EXTRACT_TASK_NAME) {}
 
 void Searcher::Songs::SongsHashesExtractHandler::process(const SongsHashesExtractPayload& payload) const {
-    DSP::ReadFileOutput read_file_output = read_file_node.process(payload.path);
+    // std::cout << "Processing song hashes extract for song id: " << payload.song_id << std::endl;
+
+    auto song = song_service.retrieve(payload.song_id);
+
+    if(!song.has_value()) {
+        std::cerr << "Song not found: " << payload.song_id << std::endl;
+        return;
+    }
+    
+    DSP::ReadFileOutput read_file_output = read_file_node.process(song->audio_file_path);
     std::vector<float> resampled_data = resample_node.process(read_file_output);
     Eigen::MatrixXcf spectrogram = stft_node.process(resampled_data);
     std::vector<Searcher::Songs::DSP::ExtractPeaksOutput> peaks = extract_peaks_node.process(spectrogram);

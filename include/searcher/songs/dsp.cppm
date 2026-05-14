@@ -7,6 +7,8 @@ module;
 
 export module searcher.songs.dsp;
 
+import core.aws;
+import core.aws.config;
 import core.dsp;
 
 export namespace Searcher::Songs::DSP {
@@ -25,7 +27,13 @@ export namespace Searcher::Songs::DSP {
 
     class ReadFileNode : public Core::DSP::IDSPNode<std::string, ReadFileOutput>{
         public:
+            ReadFileNode(Core::AWS::S3Client& s3_client, Core::AWS::Config::S3Options& s3_options);
+
             ReadFileOutput process(std::string path) override;
+
+        private:
+            Core::AWS::S3Client& s3_client;
+            Core::AWS::Config::S3Options& s3_options;
     };
 
     class ResampleNode : public Core::DSP::IDSPNode<ReadFileOutput, std::vector<float>>{

@@ -46,7 +46,6 @@ export namespace Searcher::Songs {
     class SongsPullHandler : public Jobs::Handler<SongsPullPayload> {
         public:
             SongsPullHandler(
-                SongsHashesQueue& songs_hashes_queue, 
                 Domain::Songs::Services::SongService& song_service, 
                 Core::AWS::S3Client& s3_client,
                 Core::AWS::Config::S3Options& s3_options
@@ -55,7 +54,6 @@ export namespace Searcher::Songs {
 
         private:
             std::string output_directory;
-            SongsHashesQueue& songs_hashes_queue;
             Domain::Songs::Services::SongService& song_service;
             Core::AWS::S3Client& s3_client;
             Core::AWS::Config::S3Options& s3_options;

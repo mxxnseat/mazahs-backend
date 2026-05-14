@@ -1,6 +1,8 @@
 module;
 
 #include <pqxx/pqxx>
+#include <optional>
+#include <format>
 
 module domain.songs;
 
@@ -10,6 +12,29 @@ import std;
 using namespace Domain::Songs;
 
 DAOs::SongDAO::SongDAO(const Postgres& postgres) : postgres(postgres), table("songs") {}
+
+std::optional<Entities::Song::DTO> DAOs::SongDAO::retrieve(int id) {
+    try{
+        pqxx::params params;
+        pqxx::placeholders placeholders;
+        pqxx::work trx(postgres.get_connection());
+        std::string query = std::format(R"(
+            select * from {} where id = {};
+        )", table, id);
+        pqxx::result result = trx.exec(query, params);
+        trx.commit();
+        if(result.empty()){
+            return std::nullopt;
+        }
+        return Entities::Song::DTO::from_row(result[0]);
+    }catch(pqxx::failure& ex) {
+        std::cout << ex.what() << std::endl;
+        throw;
+    }catch(...){
+        std::cout << "Unknown error" << std::endl;
+        throw;
+    }
+}
 
 Entities::Song::DTO DAOs::SongDAO::create(const Entities::Song::CreatePayload& payload) {
     try{

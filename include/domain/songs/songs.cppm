@@ -4,6 +4,7 @@ module;
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 export module domain.songs;
 
@@ -137,6 +138,7 @@ export namespace Domain::Songs {
                 SongDAO(const Postgres& postgres);
 
                 Entities::Song::DTO create(const Entities::Song::CreatePayload& payload);
+                std::optional<Entities::Song::DTO> retrieve(int id);
                 Entities::Song::DTO update(int id, const Entities::Song::UpdatePayload& payload);
             private:
                 const Postgres& postgres;
@@ -161,6 +163,7 @@ export namespace Domain::Songs {
                 SongService(DAOs::SongDAO& song_dao);
 
                 Entities::Song::DTO create(const Entities::Song::CreatePayload& payload);
+                std::optional<Entities::Song::DTO> retrieve(int id);
                 Entities::Song::DTO update(int id, const Entities::Song::UpdatePayload& payload);
             private:
                 DAOs::SongDAO& song_dao;
